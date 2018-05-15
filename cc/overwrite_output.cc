@@ -1,11 +1,17 @@
 #include "tensorflow/core/framework/op.h"
+#include "tensorflow/core/framework/shape_inference.h"
 #include "tensorflow/core/framework/op_kernel.h"
 
+using namespace tensorflow;
 
 REGISTER_OP("OverwriteOutput")
     .Input("graph_input: float")
     .Input("external_input: float")
-    .Output("external_input_copy: float");
+    .Output("external_input_copy: float")
+    .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
+        c->set_output(0, c->input(0));
+        return Status::OK();
+    });
 
 using namespace tensorflow;
 

@@ -1,10 +1,16 @@
 #include "tensorflow/core/framework/op.h"
+#include "tensorflow/core/framework/shape_inference.h"
 #include "tensorflow/core/framework/op_kernel.h"
 
+using namespace tensorflow;
 
 REGISTER_OP("Binarized")
     .Input("to_binarize: float")
-    .Output("binarized: float");
+    .Output("binarized: float")
+    .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
+        c->set_output(0, c->input(0));
+        return Status::OK();
+    });
 
 using namespace tensorflow;
 
